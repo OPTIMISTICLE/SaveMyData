@@ -7,8 +7,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 try:
-    client = MongoClient(
-        "mongodb+srv://mondesir:mondesir123@cluster0.kdd7s4g.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", tlsCAFile=certifi.where())
+    client = MongoClient("mongodb+srv://mondesir:mondesir123@cluster0.kdd7s4g.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", tlsCAFile=certifi.where())
     db = client.savemydata  # Select database
     collection = db.data  # Select collection
 except Exception as e:
