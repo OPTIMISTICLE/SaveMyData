@@ -1,3 +1,4 @@
+from bson import ObjectId
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from pymongo import MongoClient
@@ -15,9 +16,27 @@ except Exception as e:
 
 @app.route('/save', methods=["POST"])
 def save():
-    valeur = request.json['valeur']
+    valeur = request.json
+    filter_query = {"_id": ObjectId("66424f99f85f46c3d2768f06")}
 
-    new_save = {"valeur": valeur}
+    # Specify the new nested object for the time entry
+    new_time_entry = {
+        "source": "NewSource",
+        "intensity": 300,
+        "voltage": 250
+    }
+
+    # Specify the update operation
+    update_operation = {
+        "$set": {
+            f"SiteA.zoneB.2024-01-01.01:00:00": new_time_entry
+        }
+    }
+
+    # Update the document
+    result = collection.update_one(filter_query, update_operation)
+
+    new_save = valeur
     result = collection.insert_one(new_save)
 
     saved_data = collection.find_one({"_id": result.inserted_id})
