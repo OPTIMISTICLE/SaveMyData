@@ -1,21 +1,32 @@
-import datetime
+class TimeEntry:
+    def __init__(self, source, intensity, voltage):
+        self.source = source
+        self.intensity = intensity
+        self.voltage = voltage
 
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
-from sqlalchemy.orm import declarative_base, relationship
+class Zone:
+    def __init__(self):
+        self.time_entries = {}
 
-Base = declarative_base()
+    def add_time_entry(self, timestamp, time_entry):
+        self.time_entries[timestamp] = time_entry
 
-class Data(Base):
-    __tablename__ = 'Data'
-    id = Column(Integer, primary_key=True)
-    data= Column(String(255), nullable=False)
-    date = Column(DateTime(timezone=True), nullable=False)
-    time = Column(DateTime(timezone=True), nullable=False)
-    def __init__(self,  data, date=datetime.datetime.now(), time=datetime.datetime.now()):
-        self.data = data
-        self.date = date
-        self.time = time
+class Site:
+    def __init__(self):
+        self.zones = {}
 
-    def __repr__(self):
-        return '<Data %r>' % self.data
+    def add_zone(self, zone_name):
+        self.zones[zone_name] = Zone()
 
+    def get_zone(self, zone_name):
+        return self.zones.get(zone_name)
+
+class Data:
+    def __init__(self):
+        self.sites = {}
+
+    def add_site(self, site_name):
+        self.sites[site_name] = Site()
+
+    def get_site(self, site_name):
+        return self.sites.get(site_name)
